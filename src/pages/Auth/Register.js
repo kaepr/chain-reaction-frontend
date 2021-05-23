@@ -20,6 +20,8 @@ const formReducer = (state, event) => {
 export const Register = () => {
   const [formData, setFormData] = useReducer(formReducer, {});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ export const Register = () => {
       const res = await API.post('/api/auth/register', {
         email: formData.email,
         username: formData.username,
-        password: formData.username,
+        password: formData.password,
       });
 
       setAccessToken(res.data.accessToken);
@@ -41,10 +43,15 @@ export const Register = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
+      setError(true);
+      setErrorMsg(err.response.data.error.message);
+      setTimeout(() => {
+        setError(false);
+        setErrorMsg('');
+      }, 2000);
       setFormData({
         reset: true,
       });
-      console.log(err.response.data);
     }
   };
 
@@ -137,6 +144,14 @@ export const Register = () => {
           </div>
         </form>
       </div>
+      {error && (
+        <div
+          class="max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span class="block sm:inline">{errorMsg}</span>
+        </div>
+      )}
     </div>
   );
 };
