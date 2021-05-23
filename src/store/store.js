@@ -1,6 +1,3 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
-export const userData = atom({
-  key: 'userData',
-  default: {},
-});
+export const userData = atom({});

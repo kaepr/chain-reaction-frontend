@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { mutate } from 'swr';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
 
@@ -35,6 +36,7 @@ export const Login = (props) => {
       setAccessToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
 
+      mutate('/api/user/me');
       setLoading(false);
       props.history.push('/');
     } catch (err) {

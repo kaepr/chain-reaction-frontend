@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 import { Link, Redirect } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { mutate } from 'swr';
 
 import { userData } from '../../store/store';
 import API from '../../utils/api/api';
@@ -15,20 +16,17 @@ import { LoggedOutRoutes, LoggedInRoutes } from './NavbarData';
 
 export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
-
   const [user, setUser] = useRecoilState(userData);
-  console.log('user navbar recoil = ', user);
+  const [logged, setLogged] = useState(false);
 
-  if (Object.keys(user).length !== 0 && user.constructor === Object) {
-    console.log('EQUALS');
-  } else {
-    console.log('SOMETHING');
-  }
-
-  let logged = false;
-  if (Object.keys(user).length !== 0 && user.constructor === Object) {
-    logged = true;
-  }
+  useEffect(() => {
+    console.log('here', user);
+    if (Object.keys(user).length !== 0 && user.constructor === Object) {
+      setLogged(true);
+    } else {
+      setLogged(false);
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     console.log('do logout');
@@ -41,9 +39,9 @@ export const Navbar = () => {
       });
       removeAccessToken();
       removeRefreshToken();
-
-      logged = false;
+      setLogged(false);
       setUser({});
+      mutate('/api/user/me');
     } catch (err) {
       console.log(err);
     }

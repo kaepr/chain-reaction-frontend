@@ -1,6 +1,7 @@
 import React, { useState, useReducer } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import API from '../../utils/api/api';
+import { mutate } from 'swr';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
 
 const formReducer = (state, event) => {
@@ -17,7 +18,7 @@ const formReducer = (state, event) => {
   };
 };
 
-export const Register = () => {
+export const Register = (props) => {
   const [formData, setFormData] = useReducer(formReducer, {});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -37,18 +38,9 @@ export const Register = () => {
       setAccessToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
 
-      // logged in now
-      // return to home/dashboard
-
       setLoading(false);
-
-      return (
-        <Redirect
-          to={{
-            pathname: '/profile',
-          }}
-        />
-      );
+      mutate('/api/user/me');
+      props.history.push('/');
     } catch (err) {
       setLoading(false);
       setError(true);
