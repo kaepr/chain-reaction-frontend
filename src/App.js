@@ -8,21 +8,19 @@ import About from './pages/About';
 import { Login, Register } from './pages/Auth';
 
 function App() {
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const res = await API.post('/api/auth/login', {
-  //         email: 'test5@gmail.com',
-  //         password: '123456',
-  //       });
-  //       console.log('res = ', res.data);
-  //     } catch (err) {
-  //       console.log('err', err);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await API.get('/api/user/me');
+        console.log('res in app.js = ', res);
+      } catch (err) {
+        console.log('goes in error');
+        console.log('err', err.response);
+      }
+    }
 
-  //   fetchData();
-  // }, []);
+    fetchData();
+  }, []);
 
   return (
     <Router>
