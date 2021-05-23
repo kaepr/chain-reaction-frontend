@@ -18,8 +18,6 @@ API.interceptors.request.use(
       config.headers['Authorization'] = 'Bearer ' + token;
     }
 
-    console.log('request sent');
-
     return config;
   },
   function (error) {

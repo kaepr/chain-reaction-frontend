@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import useSWR from 'swr';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import API from './utils/api/api';
 import Home from './pages/Home';
@@ -7,20 +9,20 @@ import Navbar from './components/Navbar';
 import About from './pages/About';
 import { Login, Register } from './pages/Auth';
 
-function App() {
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await API.get('/api/user/me');
-        console.log('res in app.js = ', res);
-      } catch (err) {
-        console.log('goes in error');
-        console.log('err', err.response);
-      }
-    }
+import { userData } from './store/store';
 
-    fetchData();
-  }, []);
+const fetcher = (url) => API.get(url).then((res) => res.data);
+
+function App() {
+  const [user, setUser] = useRecoilState(userData);
+
+  const { data, error } = useSWR('/api/user/me', fetcher);
+
+  useEffect(() => {
+    if (data !== undefined && data !== {}) setUser(data.userData);
+  }, [data]);
+
+  console.log('user from recoil ', user);
 
   return (
     <Router>
