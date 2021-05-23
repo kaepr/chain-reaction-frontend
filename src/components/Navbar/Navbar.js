@@ -1,12 +1,55 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
-import { LoggedOutRoutes } from './NavbarData';
+import { userData } from '../../store/store';
+import API from '../../utils/api/api';
+import {
+  getRefreshToken,
+  removeAccessToken,
+  removeRefreshToken,
+} from '../../utils/tokenHandler';
+import { LoggedOutRoutes, LoggedInRoutes } from './NavbarData';
 
 export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
+
+  const [user, setUser] = useRecoilState(userData);
+  console.log('user navbar recoil = ', user);
+
+  if (Object.keys(user).length !== 0 && user.constructor === Object) {
+    console.log('EQUALS');
+  } else {
+    console.log('SOMETHING');
+  }
+
+  let logged = false;
+  if (Object.keys(user).length !== 0 && user.constructor === Object) {
+    logged = true;
+  }
+
+  const handleLogout = async () => {
+    console.log('do logout');
+    try {
+      const token = getRefreshToken();
+      await API.delete('/api/auth/logout', {
+        data: {
+          refreshToken: token,
+        },
+      });
+      removeAccessToken();
+      removeRefreshToken();
+
+      logged = false;
+      setUser({});
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log('loggd in navbar = ', logged);
 
   return (
     <div className="">
@@ -21,15 +64,37 @@ export const Navbar = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {LoggedOutRoutes.map((data, index) => (
-                    <Link
-                      key={index}
-                      to={`${data.path}`}
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      {data.name}
-                    </Link>
-                  ))}
+                  {logged ? (
+                    <>
+                      {LoggedInRoutes.map((data, index) => (
+                        <Link
+                          key={index}
+                          to={`${data.path}`}
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                        >
+                          {data.name}
+                        </Link>
+                      ))}
+                      <div
+                        onClick={handleLogout}
+                        className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Logout
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {LoggedOutRoutes.map((data, index) => (
+                        <Link
+                          key={index}
+                          to={`${data.path}`}
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                        >
+                          {data.name}
+                        </Link>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -92,16 +157,39 @@ export const Navbar = () => {
           {() => (
             <div className="md:hidden" id="mobile-menu">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {LoggedOutRoutes.map((data, index) => (
-                  <Link
-                    key={index}
-                    to={`${data.path}`}
-                    onClick={() => setOpen(!isOpen)}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                  >
-                    {data.name}
-                  </Link>
-                ))}
+                {logged ? (
+                  <>
+                    {LoggedInRoutes.map((data, index) => (
+                      <Link
+                        key={index}
+                        to={`${data.path}`}
+                        onClick={() => setOpen(!isOpen)}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                      >
+                        {data.name}
+                      </Link>
+                    ))}
+                    <div
+                      onClick={handleLogout}
+                      className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                    >
+                      Logout
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {LoggedOutRoutes.map((data, index) => (
+                      <Link
+                        key={index}
+                        to={`${data.path}`}
+                        onClick={() => setOpen(!isOpen)}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                      >
+                        {data.name}
+                      </Link>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           )}

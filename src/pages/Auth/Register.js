@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
 
@@ -41,6 +41,14 @@ export const Register = () => {
       // return to home/dashboard
 
       setLoading(false);
+
+      return (
+        <Redirect
+          to={{
+            pathname: '/profile',
+          }}
+        />
+      );
     } catch (err) {
       setLoading(false);
       setError(true);
@@ -146,10 +154,10 @@ export const Register = () => {
       </div>
       {error && (
         <div
-          class="max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          className="max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
           role="alert"
         >
-          <span class="block sm:inline">{errorMsg}</span>
+          <span className="block sm:inline">{errorMsg}</span>
         </div>
       )}
     </div>

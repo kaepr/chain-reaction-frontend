@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
 
@@ -16,7 +16,7 @@ const formReducer = (state, event) => {
   };
 };
 
-export const Login = () => {
+export const Login = (props) => {
   const [formData, setFormData] = useReducer(formReducer, {});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -35,10 +35,8 @@ export const Login = () => {
       setAccessToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
 
-      // logged in now
-      // return to home/dashboard
-
       setLoading(false);
+      props.history.push('/');
     } catch (err) {
       setLoading(false);
       setError(true);
@@ -124,10 +122,10 @@ export const Login = () => {
       </div>
       {error && (
         <div
-          class="max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          className="max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
           role="alert"
         >
-          <span class="block sm:inline">{errorMsg}</span>
+          <span className="block sm:inline">{errorMsg}</span>
         </div>
       )}
     </div>

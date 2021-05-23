@@ -16,3 +16,22 @@ export const LoggedOutRoutes = [
     name: 'About',
   },
 ];
+
+export const LoggedInRoutes = [
+  {
+    path: '/',
+    name: 'Home',
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+  },
+  {
+    path: '/play',
+    name: 'Play',
+  },
+  {
+    path: '/about',
+    name: 'About',
+  },
+];
