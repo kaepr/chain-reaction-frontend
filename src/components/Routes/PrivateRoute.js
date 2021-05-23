@@ -1,12 +1,13 @@
-import { useRecoilValue } from 'recoil';
 import { Route, Redirect } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import { userData } from '../../store/store';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const user = useRecoilValue(userData);
-
+  const [user, setUser] = useAtom(userData);
+  console.log(' user in private route = ', user);
+  
   let logged = false;
-  if (Object.keys(user).length !== 0 && user.constructor === Object) {
+  if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
     logged = true;
   }
 

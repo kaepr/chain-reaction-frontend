@@ -1,13 +1,16 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { userData } from '../../store/store';
 
 export const Dashboard = () => {
-  const user = useRecoilValue(userData);
+  const [user, setUser] = useAtom(userData);
+
+  console.log('user in dashboard = ', user);
+
   return (
     <div>
       Dashboard
-      {user.username}
+      {user.userData.username}
     </div>
   );
 };

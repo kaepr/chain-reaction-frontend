@@ -1,8 +1,8 @@
 import React, { useState, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../utils/api/api';
-import { mutate } from 'swr';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
+import { useUser } from '../../utils/queries/query';
 
 const formReducer = (state, event) => {
   if (event.reset) {
@@ -23,6 +23,7 @@ export const Register = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const { refetch } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,9 +38,8 @@ export const Register = (props) => {
 
       setAccessToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
-
+      await refetch();
       setLoading(false);
-      mutate('/api/user/me');
       props.history.push('/');
     } catch (err) {
       setLoading(false);

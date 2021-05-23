@@ -1,9 +1,9 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 import { userData } from '../../store/store';
 
 export const Play = () => {
-  const user = useRecoilValue(userData);
+  const [user, setUser] = useAtom(userData);
   return (
     <div className="mx-auto">
       Play

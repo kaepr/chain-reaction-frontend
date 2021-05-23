@@ -1,8 +1,10 @@
 import React, { useState, useReducer } from 'react';
 import { Link } from 'react-router-dom';
-import { mutate } from 'swr';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
+import { useAtom } from 'jotai';
+import { userData } from '../../store/store';
+import { useUser } from '../../utils/queries/query';
 
 const formReducer = (state, event) => {
   if (event.reset) {
@@ -22,6 +24,7 @@ export const Login = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const { refetch } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ export const Login = (props) => {
       setAccessToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
 
-      mutate('/api/user/me');
+      await refetch();
       setLoading(false);
       props.history.push('/');
     } catch (err) {

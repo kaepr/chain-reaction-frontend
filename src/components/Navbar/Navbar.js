@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 import { Link, Redirect } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { mutate } from 'swr';
+import { useAtom } from 'jotai';
 
 import { userData } from '../../store/store';
 import API from '../../utils/api/api';
@@ -16,12 +15,12 @@ import { LoggedOutRoutes, LoggedInRoutes } from './NavbarData';
 
 export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
-  const [user, setUser] = useRecoilState(userData);
+  const [user, setUser] = useAtom(userData);
   const [logged, setLogged] = useState(false);
 
   useEffect(() => {
     console.log('here', user);
-    if (Object.keys(user).length !== 0 && user.constructor === Object) {
+    if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
       setLogged(true);
     } else {
       setLogged(false);
@@ -40,8 +39,7 @@ export const Navbar = () => {
       removeAccessToken();
       removeRefreshToken();
       setLogged(false);
-      setUser({});
-      mutate('/api/user/me');
+      setUser(undefined);
     } catch (err) {
       console.log(err);
     }
