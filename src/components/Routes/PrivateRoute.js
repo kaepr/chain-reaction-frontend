@@ -4,8 +4,8 @@ import { userData } from '../../store/store';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [user, setUser] = useAtom(userData);
-  console.log(' user in private route = ', user);
-  
+  // console.log(' user in private route = ', user);
+
   let logged = false;
   if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
     logged = true;

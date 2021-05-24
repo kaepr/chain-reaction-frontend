@@ -8,8 +8,8 @@ export function useUser() {
 
   const checkLoggedIn = async () => {
     const res = await API.get('/api/user/me');
-    setUser(res.data);
-    console.log('data from jotai = ', user);
+    await setUser(res.data);
+    // console.log('data from jotai = ', user);
     return res.data;
   };
 

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
 import { userData } from '../../store/store';
@@ -18,18 +18,10 @@ export const Navbar = () => {
   const [user, setUser] = useAtom(userData);
   const [logged, setLogged] = useState(false);
 
-  useEffect(() => {
-    console.log('here', user);
-    if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
-      setLogged(true);
-    } else {
-      setLogged(false);
-    }
-  }, [user]);
-
   const handleLogout = async () => {
-    console.log('do logout');
+    // console.log('do logout');
     try {
+      await setUser(undefined);
       const token = getRefreshToken();
       await API.delete('/api/auth/logout', {
         data: {
@@ -39,13 +31,20 @@ export const Navbar = () => {
       removeAccessToken();
       removeRefreshToken();
       setLogged(false);
-      setUser(undefined);
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log('loggd in navbar = ', logged);
+  useEffect(() => {
+    if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
+      setLogged(true);
+    } else {
+      setLogged(false);
+    }
+  }, [user]);
+
+  // console.log('loggd in navbar = ', logged);
 
   return (
     <div className="">

@@ -2,8 +2,6 @@ import React, { useState, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
-import { useAtom } from 'jotai';
-import { userData } from '../../store/store';
 import { useUser } from '../../utils/queries/query';
 
 const formReducer = (state, event) => {
