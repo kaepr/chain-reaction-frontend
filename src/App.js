@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { useQuery } from 'react-query';
 
 import PrivateRoute from './components/Routes/PrivateRoute';
-import API from './utils/api/api';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import About from './pages/About';
@@ -14,6 +12,7 @@ import Play from './pages/Play';
 
 import { useUser } from './utils/queries/query';
 import { userData } from './store/store';
+import GameProvider from './contexts/GameContext';
 
 function App() {
   const [user, setUserJotai] = useAtom(userData);
@@ -33,7 +32,9 @@ function App() {
         <Route path="/login" exact component={Login} />
         <Route path="/register" exact component={Register} />
         <PrivateRoute path="/dashboard" exact component={Dashboard} />
-        <PrivateRoute path="/play" exact component={Play} />
+        <GameProvider>
+          <PrivateRoute path="/play" exact component={Play} />
+        </GameProvider>
       </Switch>
     </Router>
   );
