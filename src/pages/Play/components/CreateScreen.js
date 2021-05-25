@@ -14,7 +14,6 @@ const CreateScreen = ({ socketHandler }) => {
 
   function handleChange(value) {
     dispatch({ type: ACTIONS.SET_ROOM, payload: value });
-    console.log('input value = ', gameState.roomNumber);
   }
 
   // Handles submitting for Player 2
