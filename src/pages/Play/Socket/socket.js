@@ -10,7 +10,7 @@ export function init() {
     url = 'https://chain-reaction-backend.herokuapp.com';
   }
 
-  const socket = openSocket(url, {
+  const socket = openSocket('https://chain-reaction-backend.herokuapp.com', {
     transports: ['websocket', 'polling'],
     query: {
       data: 'hello from client',
