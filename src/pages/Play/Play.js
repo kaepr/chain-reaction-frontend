@@ -5,10 +5,13 @@ import ACTIONS from '../../types/gameTypes';
 import WaitRoomScreen from './components/WaitRoomScreen';
 import CreateScreen from './components/CreateScreen';
 import GameScreen from './components/GameScreen';
+import { userData } from '../../store/store';
+import { useAtom } from 'jotai';
 
 export const Play = () => {
   const [socketHandler, setSocketHandler] = useState(null);
   const { gameState, dispatch } = useContext(GameContext);
+  const [user, setUser] = useAtom(userData);
 
   useEffect(() => {
     const socketClient = init();
@@ -78,6 +81,10 @@ export const Play = () => {
       dispatch({ type: ACTIONS.CLEAR_ERRORS });
     }, 5000);
   }, [gameState]);
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <div className="text-gray-700 mt-8 mx-auto max-w-sm flex flex-col">

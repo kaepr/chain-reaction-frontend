@@ -1,8 +1,10 @@
 import React, { useState, useReducer } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import API from '../../utils/api/api';
 import { setAccessToken, setRefreshToken } from '../../utils/tokenHandler';
 import { useUser } from '../../utils/queries/query';
+import { logged } from '../../store/store';
+import { useAtom } from 'jotai';
 
 const formReducer = (state, event) => {
   if (event.reset) {
@@ -23,6 +25,17 @@ export const Login = (props) => {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { refetch } = useUser();
+  const [jotaiLogged, setJotaiLogged] = useAtom(logged);
+
+  if (jotaiLogged) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
+        }}
+      />
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,6 +52,7 @@ export const Login = (props) => {
 
       await refetch();
       setLoading(false);
+      await setJotaiLogged(true);
       props.history.push('/');
     } catch (err) {
       setLoading(false);
@@ -51,6 +65,7 @@ export const Login = (props) => {
       setFormData({
         reset: true,
       });
+      await setJotaiLogged(false);
     }
   };
 

@@ -5,6 +5,10 @@ import { userData } from '../../store/store';
 export const Dashboard = () => {
   const [user, setUser] = useAtom(userData);
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <div>
       Dashboard

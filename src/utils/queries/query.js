@@ -1,13 +1,15 @@
 import { useAtom } from 'jotai';
 import { useQuery } from 'react-query';
-import { userData } from '../../store/store';
+import { userData, logged } from '../../store/store';
 import API from '../api/api';
 
 export function useUser() {
   const [user, setUser] = useAtom(userData);
+  const [jLogged, setJLogged] = useAtom(logged);
 
   const checkLoggedIn = async () => {
     const res = await API.get('/api/user/me');
+    await setJLogged(true);
     await setUser(res.data);
     // console.log('data from jotai = ', user);
     return res.data;

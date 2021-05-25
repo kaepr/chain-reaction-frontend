@@ -4,7 +4,7 @@ import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
-import { userData } from '../../store/store';
+import { userData, logged } from '../../store/store';
 import API from '../../utils/api/api';
 import {
   getRefreshToken,
@@ -16,12 +16,11 @@ import { LoggedOutRoutes, LoggedInRoutes } from './NavbarData';
 export const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
   const [user, setUser] = useAtom(userData);
-  const [logged, setLogged] = useState(false);
+  const [jotaiLogged, setJotaiLogged] = useAtom(logged);
 
   const handleLogout = async () => {
     // console.log('do logout');
     try {
-      await setUser(undefined);
       const token = getRefreshToken();
       await API.delete('/api/auth/logout', {
         data: {
@@ -30,19 +29,19 @@ export const Navbar = () => {
       });
       removeAccessToken();
       removeRefreshToken();
-      setLogged(false);
+      await setJotaiLogged(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
-      setLogged(true);
-    } else {
-      setLogged(false);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && Object.keys(user).length !== 0 && user.constructor === Object) {
+  //     setLogged(true);
+  //   } else {
+  //     setLogged(false);
+  //   }
+  // }, [jotaiLogged]);
 
   // console.log('loggd in navbar = ', logged);
 
@@ -59,7 +58,7 @@ export const Navbar = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {logged ? (
+                  {jotaiLogged ? (
                     <>
                       {LoggedInRoutes.map((data, index) => (
                         <Link
@@ -152,7 +151,7 @@ export const Navbar = () => {
           {() => (
             <div className="md:hidden" id="mobile-menu">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {logged ? (
+                {jotaiLogged ? (
                   <>
                     {LoggedInRoutes.map((data, index) => (
                       <Link
