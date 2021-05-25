@@ -7,7 +7,7 @@ Frontend implemention of the chain reaction game.
 ## About
 Chain reaction is a multiplayer game, in which players are assigned colors and take turns placing cells on the board. As soon as a cell reaches its limit, the cell explodes and spreads into the adjacent cells, changing the cell's color. As soon as the whole board is covered in a single color, the respective player wins.
 
-The project uses React for the frontend framework and jest for testing. Used react query for handling server side queries, and jotai for local state management.
+The project uses React for the frontend framework. Used react query for handling server side queries, and jotai for local state management.
 
 ## Project Setup 
 1. Clone the frontend repository
