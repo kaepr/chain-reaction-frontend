@@ -71,7 +71,9 @@ export const Play = () => {
 
       socketHandler.on('connect_error', (data) => {
         console.log('data from not authorized', data.data);
-        dispatch({ type: ACTIONS.SET_ERRORS, payload: data.data.content });
+        if (data.data.content) {
+          dispatch({ type: ACTIONS.SET_ERRORS, payload: data.data.content });
+        }
       });
     }
   }, [socketHandler]);
