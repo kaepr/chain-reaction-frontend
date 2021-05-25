@@ -5,8 +5,6 @@ import GameGrid from './GameGrid';
 const GameScreen = ({ socketHandler }) => {
   const { gameState } = useContext(GameContext);
 
-  // Handles submitting for Player 1
-
   return (
     <>
       <div className="mt-4 flex flex-col content-center justify-center text-center">
@@ -16,7 +14,10 @@ const GameScreen = ({ socketHandler }) => {
         <p className="text-lg">Current Player Turn = {gameState.turn}</p>
 
         {gameState.winner !== 0 && (
-          <p className="text-lg">Winner = {gameState.winner}</p>
+          <>
+            <p className="text-lg">Winner = {gameState.winner}</p>
+            <p className="text-lg">Reload to play again</p>
+          </>
         )}
       </div>
 

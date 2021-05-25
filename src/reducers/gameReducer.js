@@ -38,6 +38,12 @@ function gameReducer(state, action) {
         winner: action.payload,
       };
 
+    case ACTIONS.CLEAR_ERRORS:
+      return {
+        ...state,
+        errors: [],
+      };
+
     default:
       return state;
   }

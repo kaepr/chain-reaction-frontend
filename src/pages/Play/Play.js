@@ -59,6 +59,7 @@ export const Play = () => {
        *
        */
       socketHandler.on('ROOM_FULL', (data) => {
+        console.log('errors', data);
         dispatch({ type: ACTIONS.SET_ERRORS, payload: data.errorMsg });
       });
 
@@ -72,11 +73,27 @@ export const Play = () => {
     }
   }, [socketHandler]);
 
-  console.log('game state', gameState);
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({ type: ACTIONS.CLEAR_ERRORS });
+    }, 5000);
+  }, [gameState]);
 
   return (
     <div className="text-gray-700 mt-8 mx-auto max-w-sm flex flex-col">
       <span className="font-bold text-4xl text-center ">Play</span>
+      {gameState.errors.map((item, index) => {
+        return (
+          <div
+            key={index}
+            className="mt-4 max-w-xs mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <span className="block sm:inline">{item}</span>
+          </div>
+        );
+      })}
+
       {gameState.playerNumber === 0 && (
         <CreateScreen socketHandler={socketHandler} />
       )}
