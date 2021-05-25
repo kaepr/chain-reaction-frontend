@@ -33,7 +33,6 @@ const GameGrid = ({ socketHandler }) => {
 };
 
 const DrawBoard = (dataBoard) => {
-  console.log('databoard', dataBoard);
   if (dataBoard.data.length !== 0) {
     return (
       <>

@@ -12,7 +12,6 @@ export const Play = () => {
 
   useEffect(() => {
     const socketClient = init();
-    console.log('socket io client = ', socketClient);
     setSocketHandler(socketClient);
 
     return () => {
@@ -24,13 +23,11 @@ export const Play = () => {
   useEffect(() => {
     if (socketHandler !== null) {
       socketHandler.on('connection', () => {
-        console.log('sent connection request');
+        // console.log('sent connection request');
       });
 
       /**
-       *
        * Game Listeners
-       *
        */
       socketHandler.on('GAME_DATA', (data) => {
         dispatch({ type: ACTIONS.SET_GAME_DATA, payload: data });
@@ -54,9 +51,7 @@ export const Play = () => {
       });
 
       /**
-       *
        * Error Listeners
-       *
        */
       socketHandler.on('ROOM_FULL', (data) => {
         console.log('errors', data);
@@ -69,6 +64,11 @@ export const Play = () => {
 
       socketHandler.on('UNKNOWN_ERROR', (data) => {
         dispatch({ type: ACTIONS.SET_ERRORS, payload: data.errorMsg });
+      });
+
+      socketHandler.on('connect_error', (data) => {
+        console.log('data from not authorized', data.data);
+        dispatch({ type: ACTIONS.SET_ERRORS, payload: data.data.content });
       });
     }
   }, [socketHandler]);
@@ -97,6 +97,7 @@ export const Play = () => {
       {gameState.playerNumber === 0 && (
         <CreateScreen socketHandler={socketHandler} />
       )}
+
       {gameState.playerNumber === 1 && gameState.gameData.length === 0 && (
         <WaitRoomScreen />
       )}
