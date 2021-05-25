@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useReducer, useContext } from 'react';
-import { useAtom } from 'jotai';
-import { userData } from '../../store/store';
+import React, { useEffect, useState, useContext } from 'react';
 import { init } from './Socket';
 import { GameContext } from '../../contexts/GameContext';
 import ACTIONS from '../../types/gameTypes';
+import WaitRoomScreen from './components/WaitRoomScreen';
 import CreateScreen from './components/CreateScreen';
+import GameScreen from './components/GameScreen';
 
 export const Play = () => {
-  const [user, setUser] = useAtom(userData);
   const [socketHandler, setSocketHandler] = useState(null);
-  const { game, dispatch } = useContext(GameContext);
+  const { gameState, dispatch } = useContext(GameContext);
 
   useEffect(() => {
     const socketClient = init();
@@ -24,9 +23,6 @@ export const Play = () => {
 
   useEffect(() => {
     if (socketHandler !== null) {
-      console.log('user data', user);
-      console.log('game data', game);
-
       socketHandler.on('connection', () => {
         console.log('sent connection request');
       });
@@ -36,7 +32,6 @@ export const Play = () => {
        * Game Listeners
        *
        */
-
       socketHandler.on('GAME_DATA', (data) => {
         dispatch({ type: ACTIONS.SET_GAME_DATA, payload: data });
       });
@@ -46,13 +41,16 @@ export const Play = () => {
       });
 
       socketHandler.on('INIT', (data) => {
-        console.log('player number init here = ', data);
         dispatch({ type: ACTIONS.SET_PLAYER_NUMBER, payload: data });
       });
 
       socketHandler.on('GAME_CODE', (data) => {
-        console.log('new game code = ', data);
         dispatch({ type: ACTIONS.SET_ROOM, payload: data });
+      });
+
+      socketHandler.on('IS_WINNER', (data) => {
+        console.log('winner check = ', data);
+        dispatch({ type: ACTIONS.SET_WINNER, payload: data });
       });
 
       /**
@@ -74,13 +72,25 @@ export const Play = () => {
     }
   }, [socketHandler]);
 
-  console.log('game in context = ', game);
+  console.log('game state', gameState);
 
   return (
     <div className="text-gray-700 mt-8 mx-auto max-w-sm flex flex-col">
       <span className="font-bold text-4xl text-center ">Play</span>
+      {gameState.playerNumber === 0 && (
+        <CreateScreen socketHandler={socketHandler} />
+      )}
+      {gameState.playerNumber === 1 && gameState.gameData.length === 0 && (
+        <WaitRoomScreen />
+      )}
 
-      <CreateScreen socketHandler={socketHandler} />
+      {gameState.winner !== 0 && (
+        <div className="mt-4 flex flex-col content-center justify-center text-center"></div>
+      )}
+
+      {gameState.gameData.length !== 0 && (
+        <GameScreen socketHandler={socketHandler} />
+      )}
     </div>
   );
 };

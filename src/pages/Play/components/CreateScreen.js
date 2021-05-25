@@ -3,7 +3,7 @@ import { GameContext } from '../../../contexts/GameContext';
 import ACTIONS from '../../../types/gameTypes';
 
 const CreateScreen = ({ socketHandler }) => {
-  const { game, dispatch } = useContext(GameContext);
+  const { gameState, dispatch } = useContext(GameContext);
 
   // Handles submitting for Player 1
   function joinRoom(e) {
@@ -14,14 +14,14 @@ const CreateScreen = ({ socketHandler }) => {
 
   function handleChange(value) {
     dispatch({ type: ACTIONS.SET_ROOM, payload: value });
-    console.log('input value = ', game.roomNumber);
+    console.log('input value = ', gameState.roomNumber);
   }
 
   // Handles submitting for Player 2
   function handleSubmit(e) {
     e.preventDefault();
     socketHandler.emit('JOIN_SERVER');
-    socketHandler.emit('JOIN_GAME', game.roomNumber);
+    socketHandler.emit('JOIN_GAME', gameState.roomNumber);
   }
 
   return (

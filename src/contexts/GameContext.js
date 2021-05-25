@@ -14,9 +14,9 @@ const initialState = {
 export const GameContext = createContext();
 
 const GameProvider = (props) => {
-  const [game, dispatch] = useReducer(gameReducer, initialState);
+  const [gameState, dispatch] = useReducer(gameReducer, initialState);
   return (
-    <GameContext.Provider value={{ game, dispatch }}>
+    <GameContext.Provider value={{ gameState, dispatch }}>
       {props.children}
     </GameContext.Provider>
   );

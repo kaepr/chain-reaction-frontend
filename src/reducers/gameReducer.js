@@ -32,6 +32,12 @@ function gameReducer(state, action) {
         playerNumber: action.payload,
       };
 
+    case ACTIONS.SET_WINNER:
+      return {
+        ...state,
+        winner: action.payload,
+      };
+
     default:
       return state;
   }
