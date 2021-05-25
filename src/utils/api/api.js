@@ -13,6 +13,9 @@ if (process.env.NODE_ENV === 'production') {
 
 const API = axios.create({
   baseURL: url,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 API.interceptors.request.use(
