@@ -3,7 +3,14 @@ import { getRefreshToken } from '../../../utils/tokenHandler/';
 
 export function init() {
   const token = getRefreshToken();
-  const socket = openSocket('http://localhost:5001/', {
+
+  let url = 'http://localhost:5001/';
+
+  if (process.env.NODE_ENV === 'production') {
+    url = 'https://chain-reaction-backend.herokuapp.com';
+  }
+
+  const socket = openSocket(url, {
     transports: ['websocket', 'polling'],
     query: {
       data: 'hello from client',

@@ -6,8 +6,13 @@ import {
   setRefreshToken,
 } from '../tokenHandler';
 
+let url = 'http://localhost:5000';
+if (process.env.NODE_ENV === 'production') {
+  url = 'https://chain-reaction-backend.herokuapp.com';
+}
+
 const API = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: url,
 });
 
 API.interceptors.request.use(
