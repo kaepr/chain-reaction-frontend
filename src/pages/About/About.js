@@ -17,14 +17,16 @@ export const About = () => {
         <span className="text-lg text-blue-800">
           <a href="https://github.com/standmarsh/chain-reaction-backend">
             backend
+          </a>{' '}
+          <a href="https://github.com/standmarsh/chain-reaction-frontend">
+            frontend
           </a>
         </span>
         <br />
-        and
-        <br />
         <span className="text-lg text-blue-800">
-          <a href="https://github.com/standmarsh/chain-reaction-frontend">
-            frontend
+          Made by{' '}
+          <a className="font-bold" href="https://github.com/standmarsh">
+            Shagun Agrawal
           </a>
         </span>
       </p>
