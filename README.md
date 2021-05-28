@@ -4,7 +4,7 @@ Frontend implemention of the chain reaction game.
 
 [Backend implementation](https://github.com/standmarsh/chain-reaction-backend)
 
-[Live Game Link](https://github.com/standmarsh/chain-reaction-frontend)
+[Live Game Link](https://chain-reaction-online.netlify.app/)
 
 ## About
 
